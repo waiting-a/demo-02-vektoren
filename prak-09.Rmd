@@ -20,7 +20,10 @@ In diesem Praktikum arbeiten wir mit den R Packages `{dplyr}`, `{forcats}`, `{lu
 
 ```{r lade-packages}
 
-library(tidyverse)
+library(dplyr)
+library(forcats)
+library(ggplot2)
+library(lubridate)
 
 ```
 

@@ -16,11 +16,14 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 # Lade Packages
 
-In diesem Praktikum arbeiten wir mit den R Packages `{dplyr}`, `{forcats}`, `{lubridate}`, und `{ggplot2}`. Allesamt sind Teil des Tidyverse und können daher mit einem Aufruf von `library(tidyverse)` geladen werden.
+In diesem Praktikum arbeiten wir mit den R Packages `{dplyr}`, `{forcats}`, `{lubridate}`, und `{ggplot2}`. 
 
 ```{r lade-packages}
 
-library(tidyverse)
+library(dplyr)
+library(forcats)
+library(ggplot2)
+library(lubridate)
 
 ```
 
