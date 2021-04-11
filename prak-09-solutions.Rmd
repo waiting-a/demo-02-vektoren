@@ -166,11 +166,6 @@ Datums-/Zeitwerte sind numerische Vektoren, welche die Anzahl Sekunden seit 1970
 
 ```{r vek-datumzeit}
 
-attributes(Sys.time())
-class(Sys.time())  # POSIXct = Portable Operating System Interface, calender time
-
-library(lubridate)
-
 vektor_datetime_chr <- c("1970-01-01 00:00:01", "1970-01-02 00:00:00", "2021-04-12 15:45:00")
 typeof(vektor_datetime_chr)
 
