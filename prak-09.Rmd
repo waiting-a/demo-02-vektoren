@@ -1,0 +1,271 @@
+---
+title: "Praktikum 9"
+subtitle: "Vektoren in R"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+
+# Lade Packages
+
+In diesem Praktikum arbeiten wir mit den R Packages `{dplyr}`, `{forcats}`, `{lubridate}`, und `{ggplot2}`. Allesamt sind Teil des Tidyverse und können daher mit einem Aufruf von `library(tidyverse)` geladen werden.
+
+```{r lade-packages}
+
+library(tidyverse)
+
+```
+
+# Vektoren Typen
+
+## Atomare Vektoren 
+
+- logical
+- integer (numerisch)
+- double (numerisch)
+- character
+- complex (vernachlässigbar)
+- raw (vernachlässigbar)
+
+```{r vek-atomar}
+
+# logical Vektor
+vektor_lgl <- c(TRUE, FALSE, NA)
+
+# Zwei Eigenschaften
+
+## Typ
+typeof(vektor_lgl)
+
+## Länge
+length(vektor_lgl)
+
+vektor_lgl2 <- 1:5 == 3
+typeof(vektor_lgl2)
+
+# Numerische Vektoren
+
+# Double Werte sind Näherungen. Es handelt sich um Gleitkommazahlen
+vektor_num_dbl <- c(1, 5, 3)
+typeof(vektor_num_dbl) # Zahlen in R sind standardmässig vom Type double
+
+vektor_num_int <- c(1L, 5L, 3L)
+typeof(vektor_num_int)
+
+# Character Vektoren (Zeichenvektoren)
+
+vektor_chr <- c("Apfel", "Birne", "Banane")
+typeof(vektor_chr)
+
+```
+
+# Typumwandlung
+
+Explizite Typumwandlung:
+
+- `as.logical()`
+- `as.integer()`
+- `as.double()`
+- `as.character()`
+
+```{r}
+
+as.numeric(vektor_lgl)
+as.character(vektor_lgl)
+as.integer(3.5)
+
+```
+
+Implizite Typumwandlung:
+
+```{r}
+
+vektor_num_sample <- sample(1:20, size = 100, replace = TRUE)
+
+vektor_lgl_sample <- vektor_num_sample > 10
+
+typeof(vektor_lgl_sample)
+class(vektor_lgl_sample)
+
+sum(vektor_lgl_sample)
+mean(vektor_lgl_sample)
+
+```
+
+# Erweiterte Vektoren
+
+Erweiterte Vektoren, weil diese mit zusätzlichen Attributen versehen sind. Dazu gehört die Klasse (class), welche das Verhalten beeinflusst. 
+
+- Faktoren 
+- Datums- / Zeitwerte und Zeiten
+- Tibbles
+
+## Faktoren
+
+Faktoren stellen kategoriale Daten dar, die einen festen Satz möglicher Werte annehmen können. Faktoren bauen auf integer (Ganzahlen) auf und besitzen zwei Attribute: levels und class.
+
+```{r}
+
+# Faktoren
+vektor_chr
+vektor_fct <- as.factor(vektor_chr)
+
+vektor_fct
+typeof(vektor_fct) # Faktoren bauen auf Ganzzahlen (integer) auf
+attributes(vektor_fct)
+
+```
+
+## Datumswerte
+
+Datumswerte sind numerische Vektoren, die die Anzahl der Tage seit dem 1. Januar 1970 darstellen.
+
+```{r}
+
+datum_ursprung_chr <- "1970-01-01" # ISO8601 Datumsformat
+typeof(datum_ursprung_chr)
+
+datum_ursprung_date <- as.Date(datum_ursprung_chr)
+typeof(datum_ursprung_date)
+attributes(datum_ursprung_date)
+class(datum_ursprung_date)
+
+as.double(datum_ursprung_date)
+
+datum_ursprung_date + 1 
+
+# Was ist das Ergebnis?
+
+# 1. 1
+# 2. "1"
+# 3. "1970-01-02"
+# 4. "1971-01-01"
+
+as.double(datum_ursprung_date + 1)
+
+Sys.Date()
+class(Sys.Date())
+as.numeric(Sys.Date())
+
+# Was sagt uns diese Zahl?
+# 18728 = Anzahl Tage seit Ursprung (1970-01-01)
+
+```
+
+## Datums-/Zeitwerte
+
+Datums-/Zeitwerte sind numerische Vektoren, welche die Anzahl Sekunden seit 1970-01-01 00:00:00 darstellen. Die Vektoren haben die Klasse POSIXct (Portable Operating System Interface, calender time).
+
+```{r}
+
+attributes(Sys.time())
+class(Sys.time())  # POSIXct = Portable Operating System Interface, calender time
+
+library(lubridate)
+
+vektor_datetime_chr <- c("1970-01-01 00:00:01", "1970-01-02 00:00:00", "2021-04-12 15:45:00")
+typeof(vektor_datetime_chr)
+
+vektor_datetime <- ymd_hms(vektor_datetime_chr)
+typeof(vektor_datetime)
+attributes(vektor_datetime) # Wir sehen UTC time zone, füge CET in ymd_hms hinzu
+class(vektor_datetime)
+
+with_tz(vektor_datetime, tzone = "CET")
+force_tz(vektor_datetime, tzone = "CET")
+
+as.double(vektor_datetime)
+vektor_datetime
+
+# Was geben uns diese drei Zahlen an? 
+# Anzahl Sekunden seit Urprung. Ein Tag sind:  24h * 60m * 60s = 86400s
+
+#as.Date("12.04.2021")
+#as_date("12.04.2021")
+dmy("12.04.2021")
+
+mdy("04/12/21")
+
+as_date(210412)
+ydm(210412)
+
+# Nützliche Funktionen aus dem lubridate Package
+
+day(vektor_datetime)
+month(vektor_datetime, label = TRUE, abbr = FALSE, locale = "de_CH.UTF-8") # In lokale Sprache ändern
+Sys.getlocale("LC_TIME")
+
+# Google: change locale when working on Rstudio Cloud
+# https://community.rstudio.com/t/warning-in-set-locale/49681/2
+# lubridate::month(Sys.Date(), label = TRUE, abbr = FALSE, locale = "de_CH.UTF-8")
+# Google: Switzerland UTF-8 based locales
+
+week(vektor_datetime)
+wday(vektor_datetime, label = TRUE, abbr = FALSE, week_start = 1, locale = "de_CH.UTF-8")
+
+
+```
+
+# Tibbles / Dataframes
+
+Tibbles sind Listen mit Vektoren einer einheitlichen Länge. Während ein Vektor nur einen Datentyp enthalten kann, können Listenb mehrere Datentypen enthalten.
+
+```{r}
+
+inventar <- tibble(
+  zeit = vektor_datetime,
+  frucht = vektor_chr,
+  preis = vektor_num_dbl,
+  verfuegbarkeit = vektor_lgl)
+
+typeof(inventar)
+attributes(inventar)
+class(inventar)
+
+inventar %>% 
+  mutate(datum = as_date(zeit),
+         stunde = hour(zeit),
+         minute = minute(zeit),
+         sekunde = second(zeit),
+         hms = lubridate::ymd_hms(paste(datum, stunde, minute, sekunde)),
+         monat = month(zeit, label = TRUE, abbr = FALSE, locale = "de_CH.UTF-8"))
+
+
+inventar %>% 
+  mutate(frucht = as_factor(frucht)) %>%
+  mutate(frucht = fct_relevel(frucht, c("Banane", "Birne", "Apfel"))) %>% 
+  ggplot(aes(x = frucht, y = preis)) +
+  geom_col()
+
+```
+
+# Vektor Recycling
+
+Um es zu ermöglichen mit einem Vektor zu arbeiten, wandelt R die Länge eines Vektors implizit um. Dies wird auch als Vektor Recycling bezeichnet, weil der kürzte Vektor wiederholt (recycelt) wird bis zur Länge des längeren Vektors.
+
+```{r}
+
+1:10
+1:10 + 1
+1:10 + 1:2
+1:10 + 1:3
+
+
+tibble(
+  a = 1:10,
+  b = a + 1, 
+  c = a + 1:2,
+  d = a + 1:3
+)
+
+```
+
+
