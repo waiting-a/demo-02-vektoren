@@ -1,5 +1,5 @@
 ---
-title: "Praktikum 9"
+title: "Demo 2"
 subtitle: "Vektoren in R"
 output: 
   html_document: 
@@ -125,6 +125,7 @@ vektor_fct
 typeof(vektor_fct) # Faktoren bauen auf Ganzzahlen (integer) auf
 attributes(vektor_fct)
 
+as.integer(vektor_fct)
 ```
 
 ## Datumswerte
@@ -138,6 +139,7 @@ typeof(datum_ursprung_chr)
 
 datum_ursprung_date <- as.Date(datum_ursprung_chr)
 typeof(datum_ursprung_date)
+
 attributes(datum_ursprung_date)
 class(datum_ursprung_date)
 
@@ -169,6 +171,7 @@ Datums-/Zeitwerte sind numerische Vektoren, welche die Anzahl Sekunden seit 1970
 
 ```{r vek-datumzeit}
 
+# Möglicherweise überspringen
 vektor_datetime_chr <- c("1970-01-01 00:00:01", "1970-01-02 00:00:00", "2021-04-12 15:45:00")
 typeof(vektor_datetime_chr)
 
@@ -233,13 +236,11 @@ inventar %>%
          stunde = hour(zeit),
          minute = minute(zeit),
          sekunde = second(zeit),
-         hms = lubridate::ymd_hms(paste(datum, stunde, minute, sekunde)),
-         monat = month(zeit, label = TRUE, abbr = FALSE, locale = "de_CH.UTF-8"))
+         datum2 = ymd_hms(paste(datum, stunde, minute, sekunde)))
 
 
 inventar %>% 
-  mutate(frucht = as_factor(frucht)) %>%
-  mutate(frucht = fct_relevel(frucht, c("Banane", "Birne", "Apfel"))) %>% 
+  #mutate(frucht = fct_relevel(frucht, c("Banane", "Birne", "Apfel"))) %>% 
   ggplot(aes(x = frucht, y = preis)) +
   geom_col()
 
