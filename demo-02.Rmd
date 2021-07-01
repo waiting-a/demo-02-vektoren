@@ -109,13 +109,3 @@ Tibbles sind Listen mit Vektoren einer einheitlichen Länge. Während ein Vektor
 
 ```
 
-# Vektor Recycling
-
-Um es zu ermöglichen mit einem Vektor zu arbeiten, wandelt R die Länge eines Vektors implizit um. Dies wird auch als Vektor Recycling bezeichnet, weil der kürzte Vektor wiederholt (recycelt) wird bis zur Länge des längeren Vektors.
-
-```{r vek-recycling}
-
-
-```
-
-
