@@ -16,12 +16,11 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 # Lade Packages
 
-In diesem Praktikum arbeiten wir mit den R Packages `{dplyr}`, `{forcats}`, `{lubridate}`, und `{ggplot2}`. 
+In diesem Praktikum arbeiten wir mit den R Packages `{dplyr}`, `{lubridate}`, und `{ggplot2}`. 
 
 ```{r lade-packages}
 
 library(dplyr)
-library(forcats)
 library(ggplot2)
 library(lubridate)
 
@@ -87,22 +86,6 @@ as.integer(3.5)
 
 ```
 
-Implizite Typumwandlung: **überspringen falls nötig**
-
-```{r vek-typ-implizit}
-
-vektor_num_sample <- sample(1:20, size = 100, replace = TRUE)
-
-vektor_lgl_sample <- vektor_num_sample > 10
-
-typeof(vektor_lgl_sample)
-class(vektor_lgl_sample)
-
-sum(vektor_lgl_sample)
-mean(vektor_lgl_sample)
-
-```
-
 # Erweiterte Vektoren
 
 Erweiterte Vektoren, weil diese mit zusätzlichen Attributen versehen sind. Dazu gehört die Klasse (class), welche das Verhalten beeinflusst. 
@@ -119,7 +102,7 @@ Faktoren stellen kategoriale Daten dar, die einen festen Satz möglicher Werte a
 
 # Faktoren
 vektor_chr
-vektor_fct <- as.factor(vektor_chr)
+vektor_fct <- factor(vektor_chr)
 
 vektor_fct
 typeof(vektor_fct) # Faktoren bauen auf Ganzzahlen (integer) auf
@@ -134,7 +117,7 @@ Datumswerte sind numerische Vektoren, die die Anzahl der Tage seit dem 1. Januar
 
 ```{r vek-datum}
 
-datum_ursprung_chr <- "1970-01-01" # ISO8601 Datumsformat
+datum_ursprung_chr <- "1970-01-01" # ISO 8601 Datumsformat
 typeof(datum_ursprung_chr)
 
 datum_ursprung_date <- as.Date(datum_ursprung_chr)
@@ -162,56 +145,6 @@ as.numeric(Sys.Date())
 
 # Was sagt uns diese Zahl?
 # 18728 = Anzahl Tage seit Ursprung (1970-01-01)
-
-```
-
-## Datums-/Zeitwerte **überspringen falls nötig**
-
-Datums-/Zeitwerte sind numerische Vektoren, welche die Anzahl Sekunden seit 1970-01-01 00:00:00 darstellen. Die Vektoren haben die Klasse POSIXct (Portable Operating System Interface, calender time).
-
-```{r vek-datumzeit}
-
-# Möglicherweise überspringen
-vektor_datetime_chr <- c("1970-01-01 00:00:01", "1970-01-02 00:00:00", "2021-04-12 15:45:00")
-typeof(vektor_datetime_chr)
-
-vektor_datetime <- ymd_hms(vektor_datetime_chr)
-typeof(vektor_datetime)
-attributes(vektor_datetime) # Wir sehen UTC time zone, füge CET in ymd_hms hinzu
-class(vektor_datetime)
-
-with_tz(vektor_datetime, tzone = "CET")
-force_tz(vektor_datetime, tzone = "CET")
-
-as.double(vektor_datetime)
-vektor_datetime
-
-# Was geben uns diese drei Zahlen an? 
-# Anzahl Sekunden seit Urprung. Ein Tag sind:  24h * 60m * 60s = 86400s
-
-#as.Date("12.04.2021")
-#as_date("12.04.2021")
-dmy("12.04.2021")
-
-mdy("04/12/21")
-
-as_date(210412)
-ydm(210412)
-
-# Nützliche Funktionen aus dem lubridate Package
-
-day(vektor_datetime)
-month(vektor_datetime, label = TRUE, abbr = FALSE, locale = "de_CH.UTF-8") # In lokale Sprache ändern
-Sys.getlocale("LC_TIME")
-
-# Google: change locale when working on Rstudio Cloud
-# https://community.rstudio.com/t/warning-in-set-locale/49681/2
-# lubridate::month(Sys.Date(), label = TRUE, abbr = FALSE, locale = "de_CH.UTF-8")
-# Google: Switzerland UTF-8 based locales
-
-week(vektor_datetime)
-wday(vektor_datetime, label = TRUE, abbr = FALSE, week_start = 1, locale = "de_CH.UTF-8")
-
 
 ```
 
