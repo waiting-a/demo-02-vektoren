@@ -155,7 +155,7 @@ Tibbles sind Listen mit Vektoren einer einheitlichen Länge. Während ein Vektor
 ```{r tibbles}
 
 inventar <- tibble(
-  zeit = vektor_datetime,
+  datum = Sys.Date(),
   frucht = vektor_chr,
   preis = vektor_num_dbl,
   verfuegbarkeit = vektor_lgl)
@@ -165,15 +165,7 @@ attributes(inventar)
 class(inventar)
 
 inventar %>% 
-  mutate(datum = as_date(zeit),
-         stunde = hour(zeit),
-         minute = minute(zeit),
-         sekunde = second(zeit),
-         datum2 = ymd_hms(paste(datum, stunde, minute, sekunde)))
-
-
-inventar %>% 
-  #mutate(frucht = fct_relevel(frucht, c("Banane", "Birne", "Apfel"))) %>% 
+  mutate(frucht = factor(frucht, levels = c("Banane", "Birne", "Apfel"))) %>% 
   ggplot(aes(x = frucht, y = preis)) +
   geom_col()
 
